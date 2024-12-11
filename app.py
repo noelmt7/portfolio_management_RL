@@ -46,7 +46,7 @@ class QLearningAgent:
 # Helper function for plotting with Seaborn color palette
 def plot_rewards(rewards, title, xlabel, ylabel):
     sns.set_palette("viridis")
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(12, 8))
     ax.plot(rewards, label="Total Reward")
     ax.set_title(title)
     ax.set_xlabel(xlabel)
@@ -56,8 +56,8 @@ def plot_rewards(rewards, title, xlabel, ylabel):
     st.pyplot(fig)
 
 def plot_histogram(rewards, title, xlabel, ylabel):
-    sns.set_palette("viridis")
-    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.set_palette("plasma")
+    fig, ax = plt.subplots(figsize=(12, 8))
     ax.hist(rewards, bins=20, edgecolor='black')
     ax.set_title(title)
     ax.set_xlabel(xlabel)
