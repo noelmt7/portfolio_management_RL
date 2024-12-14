@@ -64,6 +64,18 @@ def plot_histogram(rewards, title, xlabel, ylabel):
     ax.set_ylabel(ylabel)
     st.pyplot(fig)
 
+def plot_buy_sell_actions(stock_prices, buy_indices, sell_indices, title, xlabel, ylabel):
+    fig, ax = plt.subplots(figsize=(12, 8))
+    ax.plot(stock_prices, label="Stock Price", color="blue")
+    ax.scatter(buy_indices, stock_prices[buy_indices], marker="^", color="green", label="Buy", s=100)
+    ax.scatter(sell_indices, stock_prices[sell_indices], marker="v", color="red", label="Sell", s=100)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.legend()
+    ax.grid()
+    st.pyplot(fig)
+
 # Streamlit UI
 st.title("Reinforcement Learning for Portfolio Management")
 st.sidebar.header("Upload Stock Data")
@@ -137,11 +149,21 @@ if uploaded_file:
     state = env.reset()
     total_reward = 0
     rewards = []
+    buy_indices = []
+    sell_indices = []
+
     while True:
         action = agent.get_action(state)  # Use the loaded agent to get the action
         state, reward, done = env.step(action)
         total_reward += reward
         rewards.append(total_reward)
+
+        # Track buy and sell actions
+        if action == 1:  # Buy action
+            buy_indices.append(env.current_step)
+        elif action == 2:  # Sell action
+            sell_indices.append(env.current_step)
+
         if done:
             break
 
@@ -152,6 +174,9 @@ if uploaded_file:
 
     # Plot histogram of rewards across all steps
     plot_histogram(rewards, title="Distribution of Rewards", xlabel="Portfolio Value", ylabel="Frequency")
+
+    # Plot Buy/Sell actions with Stock Price
+    plot_buy_sell_actions(data['Close'], buy_indices, sell_indices, title="Buy and Sell Actions", xlabel="Step", ylabel="Price")
 
 else:
     st.info("Please upload a stock data CSV file.")
